@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pathology Agent</title>
+</head>
+<body>
+    <h2>Pathology Agent Chat</h2>
+
+    <input type="file" id="file"><br><br>
+    <input type="text" id="message" placeholder="Enter command"><br><br>
+
+    <button onclick="send()">Run</button>
+
+    <h3>Result:</h3>
+    <img id="result" width="400"/>
+
+    <script>
+        async function send() {
+            const file = document.getElementById("file").files[0];
+            const message = document.getElementById("message").value;
+
+            const formData = new FormData();
+            formData.append("file", file);
+            formData.append("message", message);
+
+            const response = await fetch("/chat", {
+                method: "POST",
+                body: formData
+            });
+
+            const blob = await response.blob();
+            document.getElementById("result").src = URL.createObjectURL(blob);
+        }
+    </script>
+</body>
+</html>
